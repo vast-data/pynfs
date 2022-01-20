@@ -54,7 +54,7 @@ class build_py(_build_py):
 setup(name = "nfs4",
       version = "0.0.0", # import this?
       package_dir = {"nfs4" : ""},
-      packages = ["nfs4", "nfs4.server41tests"],
+      packages = ["nfs4", "nfs4.server41tests", "nfs4.xdrdef"],
       description = "NFS version 4.1 tools and tests",
       long_description = DESCRIPTION,
       cmdclass = {"build_py": build_py},
