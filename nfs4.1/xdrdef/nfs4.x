@@ -910,6 +910,15 @@ typedef change_attr_type4
                 fattr4_change_attr_type;
 typedef sec_label4      fattr4_sec_label;
 typedef uint32_t        fattr4_clone_blksize;
+
+/*
+ * attributes for the delegation times being
+ * cached and served by the "client"
+ * as specified in "Extending the Opening of Files in NFSv4.2"
+ */
+typedef nfstime4        fattr4_time_deleg_access;
+typedef nfstime4        fattr4_time_deleg_modify;
+
 /*
  * rfc8276 (xattr)
  */
@@ -1020,6 +1029,14 @@ const FATTR4_SEC_LABEL          = 80;
 % * new in rfc 8276 (xattr)
 % */
 const FATTR4_XATTR_SUPPORT      = 82;
+
+%/*
+% * New RECOMMENDED Attribute for
+% * delegation caching of times
+% * as specified in "Extending the Opening of Files in NFSv4.2"
+% */
+const FATTR4_TIME_DELEG_ACCESS  = 84;
+const FATTR4_TIME_DELEG_MODIFY  = 85;
 
 /*
  * File attribute container
@@ -1741,11 +1758,16 @@ const
  OPEN4_SHARE_ACCESS_WANT_PUSH_DELEG_WHEN_UNCONTENDED
  = 0x20000;
 
+const OPEN4_SHARE_ACCESS_WANT_DELEG_TIMESTAMPS = 0x100000;
+
+
 enum open_delegation_type4 {
-        OPEN_DELEGATE_NONE      = 0,
-        OPEN_DELEGATE_READ      = 1,
-        OPEN_DELEGATE_WRITE     = 2,
-        OPEN_DELEGATE_NONE_EXT  = 3 /* new to v4.1 */
+        OPEN_DELEGATE_NONE                  = 0,
+        OPEN_DELEGATE_READ                  = 1,
+        OPEN_DELEGATE_WRITE                 = 2,
+        OPEN_DELEGATE_NONE_EXT              = 3, /* new to v4.1 */
+        OPEN_DELEGATE_READ_ATTRS_DELEG      = 4,
+        OPEN_DELEGATE_WRITE_ATTRS_DELEG     = 5
 };
 
 enum open_claim_type4 {
@@ -1921,8 +1943,10 @@ switch (open_delegation_type4 delegation_type) {
         case OPEN_DELEGATE_NONE:
                 void;
         case OPEN_DELEGATE_READ:
+        case OPEN_DELEGATE_READ_ATTRS_DELEG:
                 open_read_delegation4 read;
         case OPEN_DELEGATE_WRITE:
+        case OPEN_DELEGATE_WRITE_ATTRS_DELEG:
                 open_write_delegation4 write;
         case OPEN_DELEGATE_NONE_EXT: /* new to v4.1 */
                 open_none_delegation4 od_whynone;
