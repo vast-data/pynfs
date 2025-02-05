@@ -280,8 +280,8 @@ class NFS4Client(rpc.Client, rpc.Server):
     def op_cb_getattr(self, arg, env):
         log_cb.info("In CB_GETATTR")
         self.prehook(arg, env)
-        res = self.posthook(arg, env, res=NFS4_OK)
-        return encode_status(res)
+        status, res_ok = self.posthook(arg, env, res=None)
+        return encode_status(status, res_ok)
 
     def op_cb_layoutrecall(self, arg, env):
         log_cb.info("In CB_LAYOUTRECALL")
