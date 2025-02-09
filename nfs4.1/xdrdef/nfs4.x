@@ -1762,10 +1762,12 @@ const OPEN4_SHARE_ACCESS_WANT_DELEG_TIMESTAMPS = 0x100000;
 
 
 enum open_delegation_type4 {
-        OPEN_DELEGATE_NONE      = 0,
-        OPEN_DELEGATE_READ      = 1,
-        OPEN_DELEGATE_WRITE     = 2,
-        OPEN_DELEGATE_NONE_EXT  = 3 /* new to v4.1 */
+        OPEN_DELEGATE_NONE                  = 0,
+        OPEN_DELEGATE_READ                  = 1,
+        OPEN_DELEGATE_WRITE                 = 2,
+        OPEN_DELEGATE_NONE_EXT              = 3, /* new to v4.1 */
+        OPEN_DELEGATE_READ_ATTRS_DELEG      = 4,
+        OPEN_DELEGATE_WRITE_ATTRS_DELEG     = 5
 };
 
 enum open_claim_type4 {
@@ -1941,8 +1943,10 @@ switch (open_delegation_type4 delegation_type) {
         case OPEN_DELEGATE_NONE:
                 void;
         case OPEN_DELEGATE_READ:
+        case OPEN_DELEGATE_READ_ATTRS_DELEG:
                 open_read_delegation4 read;
         case OPEN_DELEGATE_WRITE:
+        case OPEN_DELEGATE_WRITE_ATTRS_DELEG:
                 open_write_delegation4 write;
         case OPEN_DELEGATE_NONE_EXT: /* new to v4.1 */
                 open_none_delegation4 od_whynone;
