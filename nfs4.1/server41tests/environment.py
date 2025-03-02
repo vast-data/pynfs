@@ -258,9 +258,20 @@ class Environment(testmod.Environment):
 
     def clean_sessions(self):
         """Destroy client name env.c1"""
+
+        MAX_NUM_RETRIES = 30
         for sessionid in list(self.c1.sessions):
-            self.c1.compound([op.destroy_session(sessionid)])
-            del(self.c1.sessions[sessionid])
+            retry_count = 0
+            while retry_count < MAX_NUM_RETRIES:
+                res = self.c1.compound([op.destroy_session(sessionid)])
+                if res.status != NFS4ERR_BACK_CHAN_BUSY:
+                    break
+
+                # backchannel still busy, wait a bit to retry
+                time.sleep(0.1)
+                retry_count += 1
+
+            del self.c1.sessions[sessionid]
 
     def clean_clients(self):
         """Destroy client name env.c1"""
