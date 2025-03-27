@@ -561,6 +561,9 @@ class SessionRecord(object):
 
     def remove_seq_op(self, res):
         if res.resarray[0].sr_status == NFS4_OK:
+            # Store sr_status_flags for further usage
+            self.last_seq_sr_status_flags = res.resarray[0].sr_resok4.sr_status_flags
+
             # STUB - do some checks
             res.resarray = res.resarray[1:]
         return res
