@@ -267,7 +267,7 @@ class NFS4Client(rpc.Client, rpc.Server):
         env.session = session
         res = CB_SEQUENCE4resok(session.sessionid, slot.seqid,
                                 arg.csa_slotid,
-                                channel.maxrequests, channel.maxrequests)# STUB
+                                arg.csa_highest_slotid, arg.csa_highest_slotid)
         res = self.posthook(arg, env, res)
         return encode_status(NFS4_OK, res)
 
