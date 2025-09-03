@@ -269,7 +269,7 @@ class NFS4Client(rpc.Client, rpc.Server):
                                 arg.csa_slotid,
                                 arg.csa_highest_slotid, arg.csa_highest_slotid)
         res = self.posthook(arg, env, res)
-        return encode_status(NFS4_OK, res)
+        return encode_status(res)
 
     def op_cb_recall(self, arg, env):
         log_cb.info("In CB_RECALL")
