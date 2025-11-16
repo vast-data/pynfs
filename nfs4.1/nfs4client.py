@@ -91,6 +91,7 @@ class NFS4Client(rpc.Client, rpc.Server):
         self.tag = self.create_tag()
         xid = self.compound_async(*args, **kwargs)
         pipe = kwargs.get("pipe", None)
+        log_cb.info("listen on xid=%d" % (xid,))
         res = self.listen(xid, pipe=pipe)
         if SHOW_TRAFFIC:
             log_cb.info("compound result = %r" % (res,))
