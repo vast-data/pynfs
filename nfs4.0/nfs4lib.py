@@ -159,11 +159,15 @@ class CBServer(rpc.RPCServer):
         self.opcodes = {
             OP_CB_GETATTR: self.O_CB_GetAttr,
             OP_CB_RECALL: self.O_CB_Recall,
+            OP_CB_LAYOUTRECALL: self.O_CB_LayoutReturn,
+            OP_CB_NOTIFY_DEVICEID: self.O_CB_NotifyDeviceId,
             #OP_CB_ILLEGAL: self.O_CB_Illegal,
             }
         self.opcounts = {
             OP_CB_GETATTR: 0,
             OP_CB_RECALL: 0,
+            OP_CB_LAYOUTRECALL: 0,
+            OP_CB_NOTIFY_DEVICEID: 0,
             #OP_CB_ILLEGAL: 0,
             }
 
@@ -272,6 +276,20 @@ class CBServer(rpc.RPCServer):
         self.recall_return[cbid] = NFS4_OK
         self.recall_lock.release()
         return res
+
+    def O_CB_LayoutRecall(self, op, cbid):
+        print("******* CB_LAYOUTRECALL *******")
+        self.opcounts[OP_CB_LAYOUTRECALL] += 1
+        if not self.curr_fh:
+            return self.simple_status(NFS4ERR_NOFILEHANDLE)
+        return self.simple_status(NFS4_OK)
+
+    def O_CB_NotifyDeviceId(self, op, cbid):
+        print("******* CB_NOTIFY_DEVICEID *******")
+        self.opcounts[OP_CB_NOTIFY_DEVICEID] += 1
+        if not self.curr_fh:
+            return self.simple_status(NFS4ERR_NOFILEHANDLE)
+        return self.simple_status(NFS4_OK)
 
 # STUB
 AuthSys = rpc.SecAuthSys(0,b'jupiter',103558,100,[])
