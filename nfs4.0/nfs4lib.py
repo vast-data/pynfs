@@ -159,7 +159,7 @@ class CBServer(rpc.RPCServer):
         self.opcodes = {
             OP_CB_GETATTR: self.O_CB_GetAttr,
             OP_CB_RECALL: self.O_CB_Recall,
-            OP_CB_LAYOUTRECALL: self.O_CB_LayoutReturn,
+            OP_CB_LAYOUTRECALL: self.O_CB_LayoutRecall,
             OP_CB_NOTIFY_DEVICEID: self.O_CB_NotifyDeviceId,
             #OP_CB_ILLEGAL: self.O_CB_Illegal,
             }
