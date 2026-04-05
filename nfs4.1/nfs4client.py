@@ -287,6 +287,11 @@ class NFS4Client(rpc.Client, rpc.Server):
         log_cb.info("In CB_LAYOUTRECALL")
         self.prehook(arg, env)
         res = self.posthook(arg, env, res=NFS4_OK)
+        skip_layoutreturn = False
+        if isinstance(res, tuple) and len(res) == 2:
+            res, skip_flag = res
+            if isinstance(skip_flag, bool):
+                skip_layoutreturn = skip_flag
         if res is not NFS4_OK:
             return encode_status(res)
 
@@ -296,6 +301,8 @@ class NFS4Client(rpc.Client, rpc.Server):
         lo_recall = op_lorecall.clora_recall
         lo_recalltype = lo_recall.lor_recalltype
         if lo_recalltype is LAYOUTRECALL4_FILE:
+            if skip_layoutreturn:
+                return encode_status(res)
             rclayout = lo_recall.lor_layout
             ops = [op.putfh(rclayout.lor_fh),
                    op.layoutreturn(False, lo_type, lo_iomode,
